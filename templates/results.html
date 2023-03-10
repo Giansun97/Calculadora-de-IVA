@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Calculadora de IVA - Resultados</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+		}
+
+		h1 {
+			text-align: center;
+			margin-top: 50px;
+		}
+
+		table {
+			margin: 0 auto;
+			border-collapse: collapse;
+			background-color: #fff;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+		}
+
+		th, td {
+			padding: 12px 15px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+
+		th {
+			background-color: #1a1a1a;
+			color: #fff;
+			font-weight: bold;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		tr:hover {
+			background-color: #ddd;
+		}
+
+		p {
+            font-size: 1.2em;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+		p, label {
+			font-size: 18px;
+			margin: 30px 0;
+		}
+
+		input[type="text"], input[type="submit"] {
+			font-size: 16px;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.1);
+		}
+
+		input[type="submit"] {
+			background-color: #1a1a1a;
+			color: #fff;
+			border: none;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #2e2e2e;
+		}
+
+		.no-results {
+			text-align: center;
+			font-size: 24px;
+			margin-top: 50px;
+		}
+	</style>
+
+</head>
+<body>
+	<h1>Calculadora de IVA - Resultados</h1>
+	<p>A continuación se muestran los resultados de, si el saldo del primer párrafo de IVA dio a pagar
+		o Saldo a favor.</p>
+	{% if resultados %}
+		<table>
+			<thead>
+				<tr>
+					<th>Contribuyente</th>
+					<th>CUIT</th>
+					<th>Resultado</th>
+					<th>Saldo</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for resultado in resultados %}
+					<tr>
+						<td>{{ resultado[0] }}</td>
+						<td>{{ resultado[1] }}</td>
+												<td>
+							{% if resultado[2] < 0 %}
+								IVA saldo a favor
+							{% else %}
+								IVA a pagar
+							{% endif %}
+						</td>
+						<td>{{ '{:,.2f}'.format(resultado[2]) }}</td>
+
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<p>No results found.</p>
+	{% endif %}
+</body>
+</html>
