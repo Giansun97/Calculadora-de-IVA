@@ -59,10 +59,17 @@
 </head>
 <body>
 	<h1>Calculadora de IVA</h1>
-	<p>Por favor ingrese la ruta a la carpeta donde se encuentran losa archivos:</p>
+	<p>Por favor ingrese la ruta a la carpeta donde se encuentran los archivos:</p>
 	<form action="/process_files" method="POST">
-		<label for="folder_path">Ruta de la carpeta:</label>
-		<input id="folder_path" name="folder_path" type="text">
+		<label for="folder_path">Ruta de la carpeta (comprobantes):</label>
+        <input id="folder_path" name="folder_path" type="text">
+        
+        <label for="folder_path_ret">Ruta de la carpeta(retenciones):</label>
+		<input id="folder_path_ret" name="folder_path_ret" type="text">
+
+        <label for="file_saldos">Archivo de Saldos:</label>
+		<input id="file_saldos" name="file_saldos" type="file">
+
 		<br><br>
 		<input type="submit" value="Process Files">
 	</form>

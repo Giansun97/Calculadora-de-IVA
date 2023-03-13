@@ -16,10 +16,16 @@ def index():
 def process_files():
     # Get the path to the selected folder from the form data
     folder_path = request.form.get('folder_path')
+    folder_path_ret = request.form.get('folder_path_ret')
+    file_saldos = request.form.get('file_saldos')
+
     folder_path = os.path.abspath(folder_path)
+    folder_path_ret = os.path.abspath(folder_path_ret)
 
     # Call the calcular_iva_archivos function to process the files
-    resultados = calcular_iva_archivos(ruta_archivo=folder_path)
+    resultados = calcular_iva_archivos(ruta_archivo=folder_path,
+                                       ruta_retenciones=folder_path_ret,
+                                       archivo_saldos=file_saldos)
 
     # Pass the results to a new HTML template for displaying the output
     return render_template('results.html', resultados=resultados)

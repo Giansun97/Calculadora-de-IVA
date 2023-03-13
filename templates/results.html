@@ -91,6 +91,8 @@
 					<th>CUIT</th>
 					<th>Resultado</th>
 					<th>Saldo</th>
+					<th>Saldo tecnico</th>
+					<th>Retenciones</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -106,7 +108,9 @@
 							{% endif %}
 						</td>
 						<td>{{ '{:,.2f}'.format(resultado[2]) }}</td>
-
+						<td>{{ resultado[4] }}</td>
+						<td>{{ '{:,.2f}'.format(resultado[3]) }}</td>
+						
 					</tr>
 				{% endfor %}
 			</tbody>

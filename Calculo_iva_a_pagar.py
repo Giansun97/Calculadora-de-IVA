@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-
+import numpy as np
 
 def calcular_iva_a_pagar(nombre_archivo1, nombre_archivo2):
     # Leemos ambos archivos
@@ -32,16 +32,19 @@ def calcular_iva_a_pagar(nombre_archivo1, nombre_archivo2):
     return iva_pagar
 
 
-# ruta_archivo = input('Ingrese la ruta donde se encuentran guardados los archivos')
 
 
-def calcular_iva_archivos(ruta_archivo):
+def calcular_iva_archivos(ruta_archivo, ruta_retenciones, archivo_saldos):
     archivos = os.listdir(ruta_archivo)
+    archivos_retenciones = os.listdir(ruta_retenciones)
 
     # Creamos listas vacías de archivos_ventas y archivos_compras
     archivos_ventas = []
     archivos_compras = []
     resultados = []
+
+    # Leer el archivo de saldos a favor
+    saldos_anteriores = pd.read_excel(archivo_saldos)
 
     for archivo in archivos:
         if 'MCE' in archivo:
@@ -62,7 +65,25 @@ def calcular_iva_archivos(ruta_archivo):
             if cuit_venta == cuit_compra:
                 iva_pagar = calcular_iva_a_pagar(os.path.join(ruta_archivo, archivo_venta),
                                                  os.path.join(ruta_archivo, archivo_compra))
-                resultados.append((contribuyente, cuit_venta, round(iva_pagar, 2)))
+                
+                # Buscamos el archivo de retenciones correspondiente al cuit
+                for archivo_retencion in archivos_retenciones:
+                    cuit_retencion = archivo_retencion.split("-")[3].strip()
+                    
+                    # Si el cuit coincide, sumamos el importe de la columna "Importe Ret./Perc."
+                    if cuit_venta == cuit_retencion:
+                        ruta_archivo_retencion = os.path.join(ruta_retenciones, archivo_retencion)
+                        df_retencion = pd.read_excel(ruta_archivo_retencion)
+                        importe_retencion = df_retencion['Importe Ret./Perc.'].sum()
+
+                print(saldos_anteriores['Cuit'])
+                print(cuit_venta)
+                saldo_tecnico = saldos_anteriores.loc[saldos_anteriores['Cuit'] == cuit_venta]['Saldo 1er P'].values
+                 
+
+                #Devolvemos los resultados
+                resultados.append((contribuyente, cuit_venta, round(iva_pagar, 2), importe_retencion, saldo_tecnico))
+
     return resultados
 
 # resultados = calcular_iva_archivos(ruta_archivo)
