@@ -9,14 +9,18 @@ def calcular_iva_a_pagar(nombre_archivo1, nombre_archivo2):
     df2 = pd.read_excel(nombre_archivo2,
                         header=1)
 
-    #Multiplicar por tipo de cambio
+    # Multiplicar por tipo de cambio
     df1['IVA'] *= df1['Tipo Cambio']
     df2['IVA'] *= df2['Tipo Cambio']
 
-    #Cambiar de signo si es una Nota de Crédito
+    # Si él data frame esta vació cambio los NaN por espacios en blanco.
+    df1['Tipo'].fillna("", inplace=True)  
+    df2['Tipo'].fillna("", inplace=True)  
+
+    # Cambiar de signo si es una Nota de Crédito
     df1.loc[df1["Tipo"].str.contains("Nota de Crédito"), ['IVA']] *= -1
     df2.loc[df2["Tipo"].str.contains("Nota de Crédito"), ['IVA']] *= -1
-    
+
     # Sumamos las columnas de iva crédito y débito
     iva_debito = df1['IVA'].sum()
     iva_credito = df2['IVA'].sum()
@@ -28,7 +32,7 @@ def calcular_iva_a_pagar(nombre_archivo1, nombre_archivo2):
     return iva_pagar
 
 
-#ruta_archivo = input('Ingrese la ruta donde se encuentran guardados los archivos')
+# ruta_archivo = input('Ingrese la ruta donde se encuentran guardados los archivos')
 
 
 def calcular_iva_archivos(ruta_archivo):
@@ -61,9 +65,6 @@ def calcular_iva_archivos(ruta_archivo):
                 resultados.append((contribuyente, cuit_venta, round(iva_pagar, 2)))
     return resultados
 
-
-
-
 # resultados = calcular_iva_archivos(ruta_archivo)
 # for resultado in resultados:
 #     contribuyente, cuit_venta, iva_pagar = resultado
@@ -73,4 +74,3 @@ def calcular_iva_archivos(ruta_archivo):
 #     else:
 #         print(f'El contribuyente {contribuyente} con cuit {cuit_venta} tiene ${round(abs(iva_pagar), 2)} de '
 #               f'saldo a favor de IVA.')
-
